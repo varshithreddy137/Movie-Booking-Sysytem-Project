@@ -27,8 +27,10 @@ void FileManager::loadAll() {
             try {
                 stringstream ss(line);
                 string tid, name, genre;
-                getline(ss, tid, ','); int id = stoi(tid);
-                getline(ss, name, ','); getline(ss, genre, ',');
+                getline(ss, tid, ','); 
+                int id = stoi(tid);
+                getline(ss, name, ',');
+                getline(ss, genre, ',');
                 movies_[movieCount++] = Movie(id, name, genre);
                 if (movieCount >= 50) break;
             } catch (const exception &e) {
@@ -195,7 +197,11 @@ int FileManager::findBookingIndexById(int bid) const {
 }
 void FileManager::listBookingsForUser(int userId, const string &userName) const {
     bool any = false;
-    for (int i=0;i<bookingCount;++i) if (bookings_[i].getUserId() == userId) { bookings_[i].display(); any = true; }
+    for (int i=0;i<bookingCount;++i){
+        if (bookings_[i].getUserId() == userId){
+            bookings_[i].display(); any = true;
+        }
+    }    
     if (!any) {
         // Try to find bookings from receipts.csv (in case bookings_db is empty or out-of-sync)
         const string rpath = "receipts.csv";
@@ -209,8 +215,12 @@ void FileManager::listBookingsForUser(int userId, const string &userName) const 
                     vector<string> out; string cur; bool inQuotes = false;
                     for (size_t i = 0; i < s.size(); ++i) {
                         char ch = s[i];
-                        if (ch == '"') { inQuotes = !inQuotes; continue; }
-                        if (ch == ',' && !inQuotes) { out.push_back(cur); cur.clear(); }
+                        if (ch == '"') {
+                            inQuotes = !inQuotes; continue; 
+                        }
+                        if (ch == ',' && !inQuotes) {
+                            out.push_back(cur); cur.clear(); 
+                        }
                         else cur.push_back(ch);
                     }
                     out.push_back(cur);
@@ -222,7 +232,11 @@ void FileManager::listBookingsForUser(int userId, const string &userName) const 
                     vector<string> toks = parseCsv(line);
                     if (toks.size() < 3) continue;
                     int uid = 0;
-                    try { uid = stoi(toks[1]); } catch(...) { continue; }
+                    try { 
+                        uid = stoi(toks[1]);
+                    } catch(...) { 
+                        continue;
+                    }
                     string uname = toks[2];
                     if (uid == userId && uname == userName) {
                         // tokens: Booking Id,User Id,User Name,Show Id,Seats,Amount,No of tickets,Time stamp
@@ -234,7 +248,8 @@ void FileManager::listBookingsForUser(int userId, const string &userName) const 
                         foundInReceipts = true; any = true;
                     }
                 }
-                if (!foundInReceipts) cout << "No bookings found for user " << userId << "\n";
+                if (!foundInReceipts) 
+                    cout << "No bookings found for user " << userId << "\n";
             } else {
                 cout << "No bookings found for user " << userId << "\n";
             }
@@ -334,7 +349,8 @@ bool FileManager::removeMovieById(int movieId, double &refund) {
     refund = 0.0;
     int removedShows = removeShowsByMovieId(movieId, refund);
     // shift movies array to remove movie at idx
-    for (int i = idx; i < movieCount - 1; ++i) movies_[i] = movies_[i+1];
+    for (int i = idx; i < movieCount - 1; ++i)
+        movies_[i] = movies_[i+1];
     --movieCount;
     stringstream ss; ss << "Removed movie " << movieId << " and " << removedShows << " shows; refund " << refund;
     logActivity(ss.str());
@@ -435,3 +451,4 @@ void FileManager::writeReceipt(const Booking& booking, int noOfTickets, const st
         << noOfTickets << ','
         << timestamp << "\n";
 }
+

@@ -38,6 +38,6 @@ public:
     void appendUserLog(int userId, const Booking &b);
 
     void writeReceipt(const Booking &b, int noOfTickets = 1, const string &seatList = "", const string &userName = "") ;
-    // Removes a movie and its associated shows/bookings. Returns true if removed, refund in 'refund'.
     bool removeMovieById(int movieId, double &refund);
 };
+

@@ -2,18 +2,19 @@
 #include <exception>
 #include <string>
 
-class NotFoundException : public std::exception {
+using namespace std;
+class NotFoundException : public exception {
 private:
-    std::string msg_;
+    string msg_;
 public:
-    NotFoundException(const std::string &m) : msg_(m) {}
+    NotFoundException(const string &m) : msg_(m) {}
     const char* what() const noexcept override { return msg_.c_str(); }
 };
 
-class OopsException : public std::exception {
+class OopsException : public exception {
 private:
-    std::string msg_;
+    string msg_;
 public:
-    OopsException(const std::string &m) : msg_(m) {}
+    OopsException(const string &m) : msg_(m) {}
     const char* what() const noexcept override { return msg_.c_str(); }
 };
